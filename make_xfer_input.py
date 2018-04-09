@@ -18,12 +18,13 @@ def transfer_partition_list( pathlist, outdir ):
         outname = outdir + "/" + pieces[-1]
         cmd = "xrdcp xroot://fndca1.fnal.gov/%s %s"%(pnfsname,outname)
         print cmd
-        #x = os.popen(cmd)
-        #print x.readlines()
+        x = os.popen(cmd)
+        print x.readlines()
 
 
 if __name__=="__main__":
 
-    outdir = "/cluster/kappa/90-days-archive/wongjiradlab/larbys/data/run1_numu/output/larcv/p00"
-    transfer_partition_list( "pathlists/pathlist_tmw_prod_larcv_optfilter_bnb_v11_mcc8_p00.txt", outdir )
-
+    for p in range(0,20):
+        outdir = "/cluster/kappa/90-days-archive/wongjiradlab/larbys/data/run1_numu/output/larcv/p%02d"%(p)
+        transfer_partition_list( "pathlists/pathlist_tmw_prod_larcv_optfilter_bnb_v11_mcc8_p%02d.txt"%(p), outdir )
+        
