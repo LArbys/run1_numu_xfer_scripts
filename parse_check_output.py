@@ -130,25 +130,28 @@ def check_partition_list( pathlist, outdir, resultfile, recopy=True ):
 if __name__=="__main__":
 
     # for larcv
-    #pathlist_stem = "pathlists/pathlist_tmw_prod_larcv_optfilter_bnb_v11_mcc8_p%02d.txt"
+    pathlist_stem = "pathlists/pathlist_tmw_prod_larcv_optfilter_bnb_v11_mcc8_p%02d.txt"
 
     # for larlite opreco
-    #pathlist_stem = "pathlists/larlite_opreco/pathlist_tmw_prod_larlite_optfilter_opreco_bnb_v11_mcc8_p%02d.txt"
+    #pathlist_stem = "pathlists/larlite_opreco/pathlist_tmw_prod_larlite_optfilter_opreco_bnb_v11_mcc8_p%02d"
 
     # for larlite reco2d
-    pathlist_stem = "pathlists/larlite_reco2d/pathlist_tmw_prod_larlite_optfilter_reco2d_bnb_v11_mcc8_p%02d.txt"
+    #pathlist_stem = "pathlists/larlite_reco2d/pathlist_tmw_prod_larlite_optfilter_reco2d_bnb_v11_mcc8_p%02d"
 
     for p in range(0,20):
-        
-        #outdir = "/cluster/kappa/90-days-archive/wongjiradlab/wselig01/larcv/p%02d"%(p)
-        #resultfile = "larcv_checksum_results_p%02d.txt"%(p)
-        
+        outdir = "/cluster/kappa/90-days-archive/wongjiradlab/wselig01/larcv/p%02d"%(p)
+        resultfile = "larcv_checksum_results_p%02d.txt"%(p)
         #outdir = "/cluster/kappa/90-days-archive/wongjiradlab/wselig01/larlite_opreco/p%02d"%(p)
-        #resultfile = "larlite_opreco_checksum_results_p%02d.txt"%(p)
+        #outdir = "/cluster/kappa/90-days-archive/wongjiradlab/wselig01/larlite_reco2d/p%02d"%(p)
         
-        outdir = "/cluster/kappa/90-days-archive/wongjiradlab/wselig01/larlite_reco2d/p%02d"%(p)
-        resultfile = "larlite_reco2d_checksum_results_p%02d.txt"%(p)
-       
-        print "Starting partition " + str(p) + "..."
-        check_partition_list( pathlist_stem%(p), outdir, resultfile, recopy=False )
-        print "Finished partition " + str(p) + "."
+        results = [0, 0, 0, 0, 0]
+
+        with open(resultfile, 'r') as f:
+            for l in f:
+                result_code = int(l.strip().split()[1])
+                results[result_code + 2] += 1
+
+        print "Results for " + str(p) + ":"
+        for i in range(len(results)):
+            if i != 3 and results[i] != 0:
+                print "    files with exit code " + str(i-2) + ": " + str(results[i])
